@@ -12,13 +12,22 @@ namespace Routine.Api.Data
             
         }
 
+        //
+        // 表映射
+        //
         public DbSet<Company> Companies { get; set; }
         public DbSet<Employee> Employees { get; set; }
 
+        /// <summary>
+        /// 设置映射规则，对实体进行限制
+        /// </summary>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //
+            //Company实体表的映射规则
+            //
             modelBuilder.Entity<Company>()
-                .Property(x => x.Name).IsRequired().HasMaxLength(100);
+                .Property(x => x.Name).IsRequired().HasMaxLength(100);  //必填；最大输入长度
             modelBuilder.Entity<Company>()
                 .Property(x => x.Country).HasMaxLength(50);
             modelBuilder.Entity<Company>()
@@ -28,6 +37,9 @@ namespace Routine.Api.Data
             modelBuilder.Entity<Company>()
                 .Property(x => x.Introduction).HasMaxLength(500);
 
+            //
+            //Employee实体表的映射规则
+            //
             modelBuilder.Entity<Employee>()
                 .Property(x => x.EmployeeNo).IsRequired().HasMaxLength(10);
             modelBuilder.Entity<Employee>()
@@ -35,12 +47,18 @@ namespace Routine.Api.Data
             modelBuilder.Entity<Employee>()
                 .Property(x => x.LastName).IsRequired().HasMaxLength(50);
 
+            //
+            //指明Company与Employee一对多的关系
+            //
             modelBuilder.Entity<Employee>()
-                .HasOne(x => x.Company)
-                .WithMany(x => x.Employees)
-                .HasForeignKey(x => x.CompanyId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(x => x.Company)     //导航属性是Company
+                .WithMany(x => x.Employees) //反过来是Employees
+                .HasForeignKey(x => x.CompanyId)    //外键是CompanyId
+                .OnDelete(DeleteBehavior.Cascade);  //级联删除。如果主体删除，附属的也删除
 
+            //
+            //插入一些数据
+            //
             modelBuilder.Entity<Company>().HasData(
                 new Company
                 {
@@ -204,7 +222,6 @@ namespace Routine.Api.Data
                     Industry = "Internet",
                     Product = "Browser"
                 });
-
             modelBuilder.Entity<Employee>().HasData(
                 new Employee
                 {

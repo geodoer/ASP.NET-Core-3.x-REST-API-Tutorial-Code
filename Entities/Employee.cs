@@ -13,6 +13,9 @@ namespace Routine.Api.Entities
         public Gender Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
 
+        /// <summary>
+        /// 关联的导航属性
+        /// </summary>
         public Company Company { get; set; }
     }
 }

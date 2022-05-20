@@ -11,6 +11,9 @@ using Routine.Api.Models;
 
 namespace Routine.Api.Services
 {
+    /// <summary>
+    /// Company CRUD的实现类
+    /// </summary>
     public class CompanyRepository : ICompanyRepository
     {
         private readonly RoutineDbContext _context;
@@ -98,6 +101,10 @@ namespace Routine.Api.Services
 
         public void UpdateCompany(Company company)
         {
+            /*这句话不写也行
+            EFCore会对实体进行跟踪，如果你更改实体，数据库是有变化的
+            所以不需要我们再显示的调用
+            */
             // _context.Entry(company).State = EntityState.Modified;
         }
 
@@ -121,6 +128,9 @@ namespace Routine.Api.Services
             return await _context.Companies.AnyAsync(x => x.Id == companyId);
         }
 
+        /// <summary>
+        /// 获取公司下面的员工
+        /// </summary>
         public async Task<IEnumerable<Employee>> GetEmployeesAsync(Guid companyId,
             EmployeeDtoParameters parameters)
         {
@@ -155,6 +165,9 @@ namespace Routine.Api.Services
             return await items.ToListAsync();
         }
 
+        /// <summary>
+        /// 获取公司下的某个员工
+        /// </summary>
         public async Task<Employee> GetEmployeeAsync(Guid companyId, Guid employeeId)
         {
             if (companyId == Guid.Empty)
@@ -190,6 +203,7 @@ namespace Routine.Api.Services
 
         public void UpdateEmployee(Employee employee)
         {
+            //这里不写也行，EFCore会自动跟踪员工的
             // _context.Entry(employee).State = EntityState.Modified;
         }
 
